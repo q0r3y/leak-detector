@@ -1,0 +1,89 @@
+html {
+    font-family: monospace;
+    align-items: right;
+    text-align: center;
+}
+
+p {
+    font-size: 2em;
+}
+
+body {
+    max-width: 85%;
+    margin: 0 auto;
+    background-color: linen;
+}
+
+#sensorGrid {
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 350px);
+    column-gap: 1.3em;
+    row-gap: 1.3em;
+}
+
+.sensor {
+    vertical-align: middle;
+    font-family: Arial;
+    font-size: 20px;
+    background-color: lightgrey;
+    float:left;
+    text-align: left;
+    line-height: 1.5;
+    padding: 1em 1em 1em 1em;
+}
+
+.leakHot {
+    vertical-align: middle;
+    font-family: Arial;
+    font-size: 20px;
+    background-color: lightgrey;
+    float:left;
+    text-align: left;
+    line-height: 1.5;
+    padding: 1em 1em 1em 1em;
+    animation: leakHot 2s infinite;
+}
+
+@keyframes leakHot { 0% {background-color:crimson;} 100% {background-color:#FFFF66;} }
+
+.leakCold {
+    vertical-align: middle;
+    font-family: Arial;
+    font-size: 20px;
+    background-color: lightgrey;
+    float:left;
+    text-align: left;
+    line-height: 1.5;
+    padding: 1em 1em 1em 1em;
+    animation: leakCold 2s infinite;
+    animation-direction: alternate;
+}
+
+@keyframes leakCold { 0% {background-color:crimson;} 100% {background-color:skyblue;} }
+
+@media only screen and (max-width: 900px) {
+  #sensorGrid {
+      grid-template-columns: repeat(auto-fit, 18em);
+      column-gap: 10px; row-gap: 10px;
+  }
+  .sensor {
+      font-size: .8em;
+  }
+  .leakHot {
+      font-size: .8em;
+  }
+  .leakCold {
+      font-size: .8em;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        max-width: 95%;
+        margin: 0 auto;
+        background-color: linen;
+    }
+}
+
+/* --.- .-. -.-- */

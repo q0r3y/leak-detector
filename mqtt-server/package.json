@@ -1,0 +1,20 @@
+{
+  "name": "mqtt-server",
+  "version": "1.0.0",
+  "description": "MQTT Sensor Server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node bin/server"
+  },
+  "dependencies": {
+    "mqtt": "latest",
+    "ws": "^7.4.0"
+  },
+  "keywords": [],
+  "author": "q0r3y",
+  "license": "ISC",
+  "devDependencies": {
+    "csv-parser": "^2.3.3",
+    "ejs": "^3.1.5"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "MQTT_BROKER_IP" : "172.19.78.138",
+  "MQTT_USERNAME" : "",
+  "MQTT_PASSWORD" : "",
+
+  "SENSOR_TOPICS" : [
+    "SENSOR/ESP-01",
+    "SENSOR/ESP-02",
+    "SENSOR/ESP-03",
+    "SENSOR/ESP-04",
+    "SENSOR/ESP-05",
+    "SENSOR/ESP-06",
+    "SENSOR/ESP-07",
+    "SENSOR/ESP-08",
+    "SENSOR/ESP-09",
+    "SENSOR/ESP-10",
+    "SENSOR/ESP-11",
+    "SENSOR/ESP-12",
+    "SENSOR/ESP-13",
+    "SENSOR/ESP-14",
+    "SENSOR/ESP-15",
+    "SENSOR/ESP-16",
+    "SENSOR/ESP-17",
+    "SENSOR/ESP-18",
+    "SENSOR/ESP-19",
+    "SENSOR/ESP-20"
+  ]
+}

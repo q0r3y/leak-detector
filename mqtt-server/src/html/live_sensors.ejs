@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+    <title>Sensor Live Display</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="src/javascript/sensors.js"></script>
+    <link rel="stylesheet" href="src/css/main.css">
+
+    </head>
+    <body onload="webSocketConnect();" onunload="webSocket.disconnect();">
+
+        <h1>Sensor Live Display</h1>
+        <div id="sensorGrid"></div>
+        <br>
+        <div id="status">unknown</div>
+
+    </body>
+    <footer>version: 0.2.0</footer>
+    <!--/ --.- .-. -.-- /-->
+</html>
