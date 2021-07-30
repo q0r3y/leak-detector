@@ -1,7 +1,12 @@
 {
+  "SERVICE" : "gmail",
+  "FROM_USER" : "EMAIL_USERNAME@gmail.com",
+  "USER_PASS" : "EMAIL_PASSWORD",
+  "TO_USER" : "TO_EMAIL",
+
   "MQTT_BROKER_IP" : "172.19.78.138",
-  "MQTT_USERNAME" : "",
-  "MQTT_PASSWORD" : "",
+  "MQTT_USERNAME" : "MQTT_USERNAME",
+  "MQTT_PASSWORD" : "MQTT_PASSWORD",
 
   "SENSOR_TOPICS" : [
     "SENSOR/ESP-01",
@@ -24,5 +29,8 @@
     "SENSOR/ESP-18",
     "SENSOR/ESP-19",
     "SENSOR/ESP-20"
-  ]
+  ],
+
+  "TEMP_HIGH" : 90,
+  "TEMP_LOW" : 40
 }

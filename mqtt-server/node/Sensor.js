@@ -7,15 +7,15 @@
 
 class Sensor {
 
-    #_subscribeData
+    #_qos
     #_topic
-    #_sensorId = 'default'
-    #_sensorData = {"sensor_id":"none","location":"none","leak_status":null,"temp":0,"ip_addr":"0.0.0.0","mac":"00:00:00:00:00:00"}
+    #_sensorId = ''
     #_temperature = 'default'
     #_location = 'default'
     #_leakStatus = 'default'
     #_ipAddress = 'default'
     #_macAddress = 'default'
+    #_lastUpdate = 'default'
 
     /**
      * @constructor
@@ -24,37 +24,24 @@ class Sensor {
      */
     constructor(topic, qos) {
         this.#_topic = topic;
-        this.#_subscribeData = {};
-        this.#_subscribeData[topic] = {qos: qos};
+        this.#_qos = qos;
+        this.#_lastUpdate = Date.now();
     }
 
-    // Subscribe data is an object that is used when making the initial subscription within Sensor Handler.
-    get subscribeData() {
-        return this.#_subscribeData;
+    get qos() {
+        return this.#_qos;
     }
 
-    // Sets the subscribe data
-    set subscribeData(value) {
-        this.#_subscribeData = value;
+    set qos(value) {
+        this.#_qos = value;
     }
 
-    // Sensor data is used for initial assignment received from JSON
-    get sensorData() {
-        return this.#_sensorData;
+    get lastUpdate () {
+        return this.#_lastUpdate;
     }
 
-    set sensorData(value) {
-        this.#_sensorData = value;
-        try {
-            this.#_sensorId = value.sensor_id;
-            this.#_location = value.location;
-            this.#_leakStatus = value.leak_status;
-            this.#_temperature = value.temp;
-            this.#_macAddress = value.mac;
-            this.#_ipAddress = value.ip_addr;
-        } catch (e) {
-            console.log(e);
-        }
+    set lastUpdate(value) {
+        this.#_lastUpdate = value;
     }
 
     get topic() {

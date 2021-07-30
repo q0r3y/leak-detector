@@ -8,8 +8,6 @@
 
 'use strict';
 
-// todo:  Setup MQTT Authentication
-
 const MQTT = require('mqtt');
 const SENSOR = require('./Sensor.js');
 const CONFIG = require('../config.json');
@@ -17,7 +15,7 @@ const CONFIG = require('../config.json');
 class SensorHandler {
 
     #_mqttClient;
-    #_sensorCollection = {};
+    #_sensorCollection = [];
 
     /**
      * @constructor
@@ -43,7 +41,11 @@ class SensorHandler {
     clientConnect(MQTT_BROKER_IP) {
         return new Promise( (resolve, reject) => {
             console.log(`[*] Connecting to MQTT Broker..`);
-            this.#_mqttClient = MQTT.connect(MQTT_BROKER_IP);
+            this.#_mqttClient = MQTT.connect(MQTT_BROKER_IP,{
+                clientId:"SensorHandler",
+                username: CONFIG.MQTT_USERNAME,
+                password: CONFIG.MQTT_PASSWORD,
+                clean:true});
             if (this.#_mqttClient.disconnected) {
                 reject();
             }
@@ -62,12 +64,10 @@ class SensorHandler {
     createSensorArray() {
         console.log(`[*] Building Sensor Array..`);
         return new Promise((resolve, reject) => {
-            let sensors = {};
-            let index = 1;
+            let sensors = [];
             try {
                 for (let topic of CONFIG.SENSOR_TOPICS) {
-                    sensors[`sensor${index}`] = new SENSOR(topic, 2);
-                    index++;
+                    sensors.push(new SENSOR(topic, 2));
                 }
                 this.#_sensorCollection = sensors;
                 console.log('[+] Sensor array creation completed.');
@@ -85,19 +85,19 @@ class SensorHandler {
      */
     clientSubscribe() {
         console.log(`[*] Subscribing to topics..`);
-        Object.values(this.#_sensorCollection).forEach( sensor => {
-            this.#_mqttClient.subscribe(sensor.topic, (err) => {
+        for (let sensor of this.#_sensorCollection) {
+            this.#_mqttClient.subscribe(sensor.topic, {qos: sensor.qos}, (err) => {
                 if (err) {
                     console.log(`[-] Error when trying to subscribe to topic ${sensor.topic}. ${err}`);
                 } else {
                     console.log(`[+] Subscribed to ${sensor.topic}`);
                 }
             })
-        });
+        }
     }
 
     /**
-     * @desc Puts the client in a state that listens for incoming messages.
+     * @desc Puts the application in a state that listens for incoming messages.
      *       Upon receiving a message, the mqttClient callback function loops through
      *       the sensors within sensorCollection and finds the sensors that are subscribed
      *       to the incoming message topic. It then sets the sensors data field to
@@ -109,38 +109,34 @@ class SensorHandler {
         console.log(`[*] MQTT Client Listening..`);
         this.#_mqttClient.on('message', (topic, message) => {
             console.log(`\n[+] Client has received a message on topic: ${topic}: `);
-            Object.values(this.#_sensorCollection).forEach( sensor => {
+            for (let sensor of this.#_sensorCollection) {
                 if (topic === sensor.topic) {
-                    let recMessage = {
-                        "sensor_id":"none",
-                        "location":"none",
-                        "leak_status":null,
-                        "temp":0,
-                        "ip_addr":"0.0.0.0",
-                        "mac":"00:00:00:00:00:00"
-                    };
                     try {
-                        recMessage = JSON.parse(message);
+                        let datetime = new Date();
+                        let recMsgJson = JSON.parse(message);
+                        sensor.sensorId = recMsgJson.sensor_id;
+                        sensor.location = recMsgJson.location;
+                        sensor.leakStatus = recMsgJson.leak_status;
+                        sensor.temperature = recMsgJson.temp;
+                        sensor.ipAddress = recMsgJson.ip_addr;
+                        sensor.macAddress = recMsgJson.mac_addr;
+                        sensor.lastUpdate = datetime;
+                        recMsgJson.updated = datetime;
+                        if (typeof (callback) == "function") {
+                            callback(recMsgJson);
+                        }
+                        console.log(`Received message:`,recMsgJson);
                     } catch (err) {
                         console.error(`[-] ${err}. The message received was not JSON: Message set to default value.\n`);
                     }
-                    sensor.sensorData = recMessage;
-                    console.log(`Received message:`,sensor.sensorData);
-                    if (typeof (callback) == "function") {
-                        callback(recMessage);
-                    }
                 }
-            });
+            }
         }, 1000);
     }
 
-    // getSensorData() {
-    //     let sensorData = [];
-    //     Object.values(sensorCollection).forEach( sensor => {
-    //         sensorData[sensor.sensorId] = sensor.sensorData;
-    //     });
-    //     return sensorData;
-    // }
+    getSensorData() {
+        return this.#_sensorCollection;
+    }
 
 }
 

@@ -18,7 +18,4 @@ There is also a node.js based http/websocket server that listens for updates on 
 ![demo](demo.gif)
 
 ## Todo
-* Add email handler
-* Move temperature threshold configuration to backend config file
-* Add MQTT authentication
 * Add ESP8266 schematic to README
